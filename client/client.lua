@@ -50,7 +50,7 @@ Citizen.CreateThread(function()
 								--print(v.emotehash)
 								local emote_category = 0
 								Citizen.InvokeNative(0xB31A277C1AC7B7FF,PlayerPedId(),emote_category,2,GetHashKey(v.emotehash),0,0,0,0,0)  -- FULL BODY EMOTE
-								Wait(2000)
+								Wait(4000)
 								playingemote = false
 							end
 						end
