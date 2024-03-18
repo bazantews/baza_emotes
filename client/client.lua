@@ -14,7 +14,7 @@ function RegistrarPrompt(str, key)
 	PromptSetEnabled(prompt, 1)
 	PromptSetVisible(prompt, 1)
 	PromptSetStandardMode(prompt, 1)
-    PromptSetHoldMode(prompt, 1)
+    PromptSetHoldMode(prompt, 2000)
 	PromptSetGroup(prompt, PromptGroup1, 0)
 	PromptRegisterEnd(prompt)
 	for k, v in pairs(Config.Prompts) do
@@ -28,25 +28,31 @@ end
 -------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------MAIN AREA---------------------------------------------------------
 local ShowPrompt = false
+local playingemote = false
 
 Citizen.CreateThread(function()
     while true do Wait(10)
 		if IsControlPressed(0, 0x4BC9DABB) then
 			ShowPrompt = not ShowPrompt
-			print('Ativado')
+			--print('Ativado')
 		end
 		if PromptConfigured then
 			if ShowPrompt then
 				--print('Aiming')
-				local label = CreateVarString(10, 'LITERAL_STRING', "Emotes")
-				PromptSetActiveGroupThisFrame(PromptGroup1, label)
-				for k, v in pairs(Config.Prompts) do
-					if v.configurado then
-						--print(v.configurado)
-						if Citizen.InvokeNative(0xC92AC953F0A982AE, v.prompt) then
-							print(v.emotehash)
-							local emote_category = 0
-							Citizen.InvokeNative(0xB31A277C1AC7B7FF,PlayerPedId(),emote_category,2,GetHashKey(v.emotehash),0,0,0,0,0)  -- FULL BODY EMOTE
+				if not playingemote then
+					local label = CreateVarString(10, 'LITERAL_STRING', "Emotes")
+					PromptSetActiveGroupThisFrame(PromptGroup1, label)
+					for k, v in pairs(Config.Prompts) do
+						if v.configurado then
+							--print(v.configurado)
+							if Citizen.InvokeNative(0xE0F65F0640EF0617, v.prompt) then
+								playingemote = true
+								--print(v.emotehash)
+								local emote_category = 0
+								Citizen.InvokeNative(0xB31A277C1AC7B7FF,PlayerPedId(),emote_category,2,GetHashKey(v.emotehash),0,0,0,0,0)  -- FULL BODY EMOTE
+								Wait(2000)
+								playingemote = false
+							end
 						end
 					end
 				end
